@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>unParked — Your space. Their problem. Solved.</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0D0D0D;
+    --violet: #A78BFA;
+    --mint: #6EE7B7;
+    --white: #FFFFFF;
+    --gray-light: #777777;
+    --gray-mid: #333333;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Outfit', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 3rem;
+    background: rgba(13,13,13,0.85);
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-logo { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.04em; text-decoration: none; display: flex; align-items: center; gap: 0; line-height: 1; }
+
+  .nav-cta {
+    background: var(--violet);
+    border: none;
+    color: #0D0D0D;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 0.6rem 1.4rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+
+  .nav-link {
+    color: #777777;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 400;
+    transition: color 0.2s;
+  }
+  .nav-link:hover { color: #ffffff; }
+
+  /* FULL SCREEN HERO */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8rem 2rem 4rem;
+    overflow: hidden;
+  }
+
+  /* Large faint background text */
+  .bg-text {
+    position: absolute;
+    font-size: clamp(10rem, 22vw, 20rem);
+    font-weight: 800;
+    letter-spacing: -0.06em;
+    color: rgba(167,139,250,0.04);
+    pointer-events: none;
+    white-space: nowrap;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    user-select: none;
+  }
+
+  /* Violet orb top right */
+  .orb-tr {
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(167,139,250,0.15) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  /* Mint orb bottom left */
+  .orb-bl {
+    position: absolute;
+    bottom: -100px;
+    left: -100px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(110,231,183,0.08) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero-content { position: relative; z-index: 2; }
+
+  .hero-location {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-light);
+    margin-bottom: 2.5rem;
+    animation: rise 0.6s ease both;
+  }
+
+  .loc-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--mint);
+    border-radius: 50%;
+    animation: pulse 2s ease infinite;
+  }
+
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.6)} }
+
+  .hero-headline {
+    font-size: clamp(4rem, 10vw, 9rem);
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    line-height: 0.9;
+    margin-bottom: 2rem;
+    animation: rise 0.6s 0.1s ease both;
+  }
+
+  .line-white { color: var(--white); display: block; }
+  .line-violet { color: var(--violet); display: block; }
+  .line-dim { color: rgba(255,255,255,0.2); display: block; }
+
+  .hero-tagline {
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    color: var(--gray-light);
+    font-weight: 300;
+    line-height: 1.6;
+    max-width: 380px;
+    margin: 0 auto 3.5rem;
+  }
+
+  .hero-tagline strong { color: var(--white); font-weight: 700; }
+
+  /* INLINE FORM */
+  .inline-form {
+    display: flex;
+    align-items: stretch;
+    max-width: 440px;
+    width: 100%;
+    border-radius: 10px;
+    border: 0.5px solid rgba(167,139,250,0.3);
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(8px);
+    overflow: hidden;
+    animation: rise 0.6s 0.3s ease both;
+    margin: 0 auto 1rem;
+  }
+
+  .inline-form input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 1rem 1.5rem;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    color: var(--white);
+    min-width: 0;
+  }
+  .inline-form input::placeholder { color: #555; }
+
+  .inline-form button {
+    background: var(--violet);
+    border: none;
+    border-radius: 10px;
+    margin: 4px;
+    padding: 0.7rem 1.4rem;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #0D0D0D;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+  }
+  .inline-form button:hover { opacity: 0.85; }
+
+  .form-note {
+    font-size: 0.75rem;
+    color: #444;
+    animation: rise 0.6s 0.4s ease both;
+  }
+  .form-note span { color: var(--mint); }
+
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(6px);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-overlay.show { display: flex; }
+
+  .modal-box {
+    background: #111;
+    border: 0.5px solid rgba(167,139,250,0.3);
+    border-radius: 16px;
+    padding: 2.5rem 3rem;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    animation: rise 0.3s ease both;
+  }
+
+  .modal-icon {
+    width: 52px;
+    height: 52px;
+    background: rgba(110,231,183,0.12);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.25rem;
+  }
+
+  .modal-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+    color: #fff;
+  }
+
+  .modal-sub {
+    font-size: 0.88rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-sub span { color: var(--mint); }
+
+  .modal-close {
+    background: rgba(167,139,250,0.1);
+    border: 0.5px solid rgba(167,139,250,0.3);
+    color: var(--violet);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 0.88rem;
+    padding: 0.6rem 1.5rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .modal-close:hover { background: rgba(167,139,250,0.2); }
+
+  /* SCROLL INDICATOR */
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #333;
+    animation: rise 0.6s 0.8s ease both;
+  }
+
+  .scroll-line {
+    width: 0.5px;
+    height: 40px;
+    background: linear-gradient(to bottom, rgba(167,139,250,0.5), transparent);
+    animation: scrollPulse 2s ease infinite;
+  }
+
+  @keyframes scrollPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* STATS ROW */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    border-top: 0.5px solid rgba(255,255,255,0.05);
+    border-bottom: 0.5px solid rgba(255,255,255,0.05);
+  }
+
+  .stat {
+    flex: 1;
+    max-width: 280px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    border-right: 0.5px solid rgba(255,255,255,0.05);
+  }
+  .stat:last-child { border-right: none; }
+
+  .stat-n {
+    font-size: 2.4rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+  .stat-n .acc { color: var(--violet); }
+  .stat-l {
+    font-size: 0.75rem;
+    color: var(--gray-light);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 0.3rem;
+  }
+
+  /* HOW IT WORKS */
+  .section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 7rem 2rem;
+  }
+
+  .section-eyebrow {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--violet);
+    margin-bottom: 1rem;
+  }
+
+  .section-h {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: 4rem;
+  }
+  .section-h span { color: var(--violet); }
+
+  .two-up {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .up-card {
+    border-radius: 10px;
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .up-card-v {
+    background: rgba(167,139,250,0.06);
+    border: 0.5px solid rgba(167,139,250,0.2);
+  }
+
+  .up-card-m {
+    background: rgba(110,231,183,0.05);
+    border: 0.5px solid rgba(110,231,183,0.2);
+  }
+
+  .up-card-num {
+    font-size: 5rem;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    opacity: 0.06;
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    line-height: 1;
+  }
+
+  .up-tag {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.28rem 0.8rem;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+  }
+
+  .tag-v { background: rgba(167,139,250,0.15); color: var(--violet); }
+  .tag-m { background: rgba(110,231,183,0.15); color: var(--mint); }
+
+  .up-card h3 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+  }
+
+  .up-card p {
+    font-size: 0.88rem;
+    color: var(--gray-light);
+    line-height: 1.7;
+    margin-bottom: 1.75rem;
+  }
+
+  .steps { display: flex; flex-direction: column; gap: 0.7rem; }
+
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.86rem;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .step-n {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-size: 0.62rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .sn-v { background: rgba(167,139,250,0.18); color: var(--violet); }
+  .sn-m { background: rgba(110,231,183,0.18); color: var(--mint); }
+
+  /* FOOTER */
+  footer {
+    border-top: 0.5px solid rgba(255,255,255,0.05);
+    padding: 2rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .f-logo { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.03em; }
+  .f-tag { font-size: 0.8rem; color: #444; font-style: italic; }
+  .f-copy { font-size: 0.75rem; color: #333; }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .two-up { grid-template-columns: 1fr; }
+    .stats { flex-direction: column; align-items: center; }
+    .stat { border-right: none; border-bottom: 0.5px solid rgba(255,255,255,0.05); width: 100%; text-align: center; }
+    footer { flex-direction: column; gap: 0.75rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo"><span style="line-height:1;"><span style="color:#fff">un</span><span style="color:#A78BFA">Parked</span></span></a>
+  <div style="display:flex; align-items:center; gap:2rem;">
+    <a href="#how-it-works" class="nav-link">How it works</a>
+    <button class="nav-cta" onclick="document.getElementById('email-input').focus()">Join waitlist</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="orb-tr"></div>
+  <div class="orb-bl"></div>
+
+  <div class="hero-content">
+    <div class="hero-location" style="background: rgba(30,20,60,0.9); border: 0.5px solid rgba(167,139,250,0.2); border-radius: 10px; padding: 0.4rem 1.25rem; color: #A78BFA; font-weight: 700;">
+      <div class="loc-dot"></div>
+      NOW ACCEPTING EARLY ACCESS — NASHVILLE
+    </div>
+
+    <h1 class="hero-headline">
+      <span class="line-white">Your</span>
+      <span class="line-violet">parking</span>
+      <span class="line-white">problem.</span>
+      <span class="line-white">Solved.</span>
+    </h1>
+
+    <p class="hero-tagline">
+      <strong><span style="color:#fff">un</span><span style="color:#A78BFA">Parked</span></strong> connects drivers who need a spot with homeowners who have one to spare. No garages. No meters. Just real spaces, real people, real savings.
+    </p>
+
+    <div class="inline-form" id="form-wrap">
+      <input type="email" id="email-input" placeholder="your@email.com" />
+      <button onclick="handleSubmit()">Get access</button>
+    </div>
+
+
+
+    <p class="form-note"><span>Free to join.</span> No credit card. No spam. Nashville launch coming soon.</p>
+  </div>
+
+
+</section>
+
+<div class="stats">
+  <div class="stat">
+    <div class="stat-n">$40<span class="acc">+</span></div>
+    <div class="stat-l">Avg event parking cost</div>
+  </div>
+  <div class="stat">
+    <div class="stat-n"><span class="acc">$</span>3,600</div>
+    <div class="stat-l">Avg host annual earnings</div>
+  </div>
+  <div class="stat">
+    <div class="stat-n">50<span class="acc">%</span></div>
+    <div class="stat-l">Cheaper than garages</div>
+  </div>
+</div>
+
+<section class="section" id="how-it-works">
+  <p class="section-eyebrow">How it works</p>
+  <h2 class="section-h">Two sides.<br>One <span>simple</span> platform.</h2>
+
+  <div class="two-up">
+    <div class="up-card up-card-v">
+      <span class="up-tag tag-v">For drivers</span>
+      <h3>Find a spot in seconds</h3>
+      <p>Browse available driveways near your destination. Book instantly, pay securely, show up stress-free.</p>
+      <div class="steps">
+        <div class="step"><div class="step-n sn-v">1</div>Search by location or event</div>
+        <div class="step"><div class="step-n sn-v">2</div>Choose your spot and book</div>
+        <div class="step"><div class="step-n sn-v">3</div>Park up and enjoy your day</div>
+      </div>
+    </div>
+
+    <div class="up-card up-card-m">
+      <span class="up-tag tag-m">For hosts</span>
+      <h3>Turn your driveway into income</h3>
+      <p>List your space for free and start earning whenever you're not using it. Short or long-term — you choose.</p>
+      <div class="steps">
+        <div class="step"><div class="step-n sn-m">1</div>List your space in 5 minutes</div>
+        <div class="step"><div class="step-n sn-m">2</div>Set your price and availability</div>
+        <div class="step"><div class="step-n sn-m">3</div>Get paid directly to your account</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="f-logo"><span style="color:#fff">un</span><span style="color:#A78BFA">Parked</span></span>
+  <span class="f-tag">Your space. Their problem. Solved.</span>
+  <span class="f-copy">© 2026 unParked.</span>
+</footer>
+
+<script>
+  window.onload = function() {
+    async function handleSubmit() {
+      const email = document.getElementById('email-input').value.trim();
+      if (!email || !email.includes('@')) {
+        document.getElementById('email-input').style.border = '1px solid #f87171';
+        return;
+      }
+      try {
+        const url = 'https://firestore.googleapis.com/v1/projects/unparked-waitlist/databases/(default)/documents/waitlist';
+        await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fields: {
+              email: { stringValue: email },
+              source: { stringValue: 'landing-v3' },
+              timestamp: { stringValue: new Date().toISOString() }
+            }
+          })
+        });
+        document.getElementById('email-input').value = '';
+        document.getElementById('email-input').style.border = '';
+        document.getElementById('success-modal').classList.add('show');
+      } catch (err) {
+        console.error('Error saving email:', err);
+        alert('Something went wrong. Please try again.');
+      }
+    }
+
+    window.handleSubmit = handleSubmit;
+
+    document.getElementById('email-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') handleSubmit();
+    });
+  };
+</script>
+
+<div class="modal-overlay" id="success-modal">
+  <div class="modal-box">
+    <div class="modal-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#6EE7B7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="modal-title">You're on the list!</div>
+    <div class="modal-sub">We'll reach out when <span style="color:#fff;font-weight:700;">un</span><span style="color:#A78BFA;font-weight:700;">Parked</span> launches in Nashville. Keep an eye on your inbox.</div>
+    <button class="modal-close" onclick="document.getElementById('success-modal').classList.remove('show'); document.getElementById('email-input').value = '';">Got it</button>
+  </div>
+</div>
+</html>
